@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.zsga.ywpt.mapper.SignMapper">
+  <insert id="sign" parameterType="Sign">
+  	insert into sign(userid, signdate, signip) values(#{userid},now(),#{signip})
+  </insert>
+  
+  <select id="getCurrentMonth" parameterType="Integer" resultType="Sign">
+  	SELECT
+		*
+	FROM
+		sign
+	WHERE
+		userid = #{userid}
+	AND date_format(signdate, '%Y %m') = date_format(
+		DATE_SUB(curdate(), INTERVAL 0 MONTH),
+		'%Y %m'
+	)
+	ORDER BY
+		signdate DESC
+  </select>
+  
+  
+  <select id="getPrevNextMonth" parameterType="hashMap" resultType="Sign">
+  	SELECT
+		*
+	FROM
+		sign
+	WHERE
+		userid = #{userid}
+	AND date_format(signdate, '%Y%m') = #{param}
+	ORDER BY
+		signdate DESC
+  </select>
+  
+</mapper>
